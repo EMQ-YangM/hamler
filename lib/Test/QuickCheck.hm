@@ -234,16 +234,16 @@ crashPipe :: String
 crashPipe = "●    "
 
 check :: forall a. Testable a => String -> Integer -> a -> SpaceCounter -> IO TestResult
-check s 0 m n = (printf "%s✔ %s" (concat $ replicate (n/5) basePipe) s :: IO ()) >>= \_ -> return Successed
+check s 0 m n = (printf "%s😀 %s" (concat $ replicate (n/5) basePipe) s :: IO ()) >>= \_ -> return Successed
 check s v m n = do
   i <- randomRIO 1332292274972041455 7304856964418773083
   let Gen fun = evaluate m
       Result r =  fun 15 (mkRand i)
   case r.ok of
     Just true -> check s (v-1) m n
-    Just false -> (printf "%s✖ %s -----> %s"
+    Just false -> (printf "%s😅 %s -----> %s"
                     (concat $ replicate (n/5) errorPipe) s (showAny r.arguments) :: IO ()) >>= \_ -> return $ Failed s (showAny r.arguments)
-    Nothing -> (printf "%s● %s ==> crash happened!!!  %s"
+    Nothing -> (printf "%s😈 %s ==> crash happened!!!  %s"
                     (concat $ replicate (n/5) crashPipe) s (showAny r.arguments) :: IO ()) >>= \_ -> return $ Crash s (showAny r.arguments)
 
 
@@ -273,7 +273,7 @@ runTestGroup n (TxG s xs) =
                    (succ, fail, crash, total) = tcount (0,0,0,0) res1
                    renderCrash 0 = ""
                    renderCrash i = "(crashed " <> show i <> ")"
-               printf "%s----> ◯ %d, ✔ %d, ✖ %d%s." (concat $ replicate (n/5) basePipe)  total succ fail (renderCrash crash)
+               printf "%s----> 🐅 %d, 🐠 %d, 🐞 %d%s." (concat $ replicate (n/5) basePipe)  total succ fail (renderCrash crash)
                return res
 
 runTest :: TestGroup (Integer -> IO TestResult) -> IO ()
